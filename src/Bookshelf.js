@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Books from './Books'
 
 class Bookshelf extends React.Component {
 
   render(){
-    const {bookshelf} = this.props
+    const {bookshelf,addBook} = this.props
     return(
       <div className="bookshelf">
         <h2 className="bookshelf-title"> {bookshelf.title}</h2>
@@ -13,13 +13,9 @@ class Bookshelf extends React.Component {
            {bookshelf.books.map((item, index) => (
               <li>
                 <Books
-                   width={item.width}
-                   height={item.height}
-                   backgroundImage={item.backgroundImage}
-                   title={item.title}
-                   author = {item.author} />
+                     book={item} addBook={addBook} />
               </li>
-            ))};
+            ))}
 
           </ol>
         </div>
