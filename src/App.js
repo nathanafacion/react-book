@@ -17,16 +17,29 @@ class BooksApp extends React.Component {
     )}}))
   }
 
+  updateQuery = (evt) => {
+      if (evt.key === 'Enter') {
+        BooksAPI.search(this.state.query)
+          .then((books) => {
+            this.setState(() => ({
+            allbooks:books
+          }))
+        })
+      }
+
+    }
+
   addBook = (target,book) => {
     console.log("target:",target)
     console.log("book:",book)
 
-    this.setState((currentState) => ({
-      [target]:{
-        ...currentState[target],
-        books: currentState[target].books.concat([book])
-    }}))
-
+    if (target != 'none'){
+      this.setState((currentState) => ({
+        [target]:{
+          ...currentState[target],
+          books: currentState[target].books.concat([book])
+      }}))
+    }
    switch(target){
 
       case 'currentlyReading':
@@ -41,7 +54,7 @@ class BooksApp extends React.Component {
         this.removeBook('currentlyReading',book)
         this.removeBook('wantToRead',book)
         return
-      case 'None':
+      case 'none':
         this.removeBook('read',book)
         this.removeBook('wantToRead',book)
         this.removeBook('currentlyReading',book)
@@ -65,7 +78,8 @@ class BooksApp extends React.Component {
       title:"Read",
       books: []
     },
-    page: '/'
+    page: '/',
+    query: ''
   }
   componentDidMount() {
     BooksAPI.getAll()
@@ -83,7 +97,7 @@ class BooksApp extends React.Component {
             <div className="search-books-bar">
               <a className="close-search" onClick={() => history.push('/')}>Close</a>
               <div className="search-books-input-wrapper">
-                <input type="text" placeholder="Search by title or author"/>
+                <input type="text" placeholder="Search by title or author" onChange={event => {this.setState({query: event.target.value})}} onKeyPress={this.updateQuery}/>
 
               </div>
             </div>
